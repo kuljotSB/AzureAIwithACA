@@ -43,12 +43,12 @@ az acr login --name $ACR_NAME
 
 Tag the image:
 ```bash
-docker tag chatbackend $ACR_NAME.azurecr.io/chatbackend:v1
+docker tag chatbackend $ACR_NAME.azurecr.io/chatbackend:latest
 ```
 
 Push the Image to ACR:
 ```bash
-docker push $ACR_NAME.azurecr.io/chatbackend:v1
+docker push $ACR_NAME.azurecr.io/chatbackend:latest
 ```
 
 ### Deploying the ChatBackend Application to Azure Container Apps
@@ -70,7 +70,7 @@ Run the following command to deploy the application:
 ```bash
 az containerapp create \
   -g $RG_NAME -n chatbackendapp \
-  --image $ACR_NAME.azurecr.io/chatbackend:v1 \
+  --image $ACR_NAME.azurecr.io/chatbackend:latest \
   --environment $ACA_ENV_NAME \
   --target-port 5000 \
   --ingress external \
