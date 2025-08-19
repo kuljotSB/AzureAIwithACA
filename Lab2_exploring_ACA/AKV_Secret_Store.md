@@ -114,6 +114,7 @@ az login
 
 # Set Variables
 export KEY_VAULT_SECRET_URI="<YOUR_KEY_VAULT_SECRET_URI>"
+export UAMI_NAME="YOUR_UAMI_NAME"
 export UAMI_IDENTITY_ID="YOUR_UAMI_IDENTITY_ID"
 
 ## Deploy Application to Container App
@@ -124,10 +125,15 @@ az containerapp create \
   --target-port 5000 \
   --ingress external \
   --registry-server $ACR_NAME.azurecr.io \
+  --user-assigned $UAMI_NAME \
   --registry-identity system \
-  --system-assigned \
   --secrets azure-api-key=keyvaultref:$KEY_VAULT_SECRET_URI,identityref:$UAMI_IDENTITY_ID \
   --env-vars azure-api-url=$AZURE_API_URL azure-model-name=$AZURE_MODEL_NAME azure-api-key=secretref:azure-api-key
+```
+
+Run the following command to test your deployment:
+```bash
+curl -X POST <YOUR_CONTAINER_APP_FQDN>/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
 ```
 
 ### Summary
