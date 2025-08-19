@@ -108,10 +108,9 @@ Run the following command to create an new revision for the `ChatBackend` applic
 ```bash
 az containerapp update --name chatbackendapp \
   --resource-group $RG_NAME \
-  --image --image $ACR_NAME.azurecr.io/chatbackend:latest \
+  --image $ACR_NAME.azurecr.io/chatbackend:latest \
   --revision-suffix v2  \
-  --secrets azure-api-key=$AZURE_API_KEY \
-  --env-vars azure-api-url=$AZURE_API_URL azure-model-name=$AZURE_MODEL_NAME_v2 azure-api-key=secretref:azure-api-key \
+  --set-env-vars azure-api-url=$AZURE_API_URL azure-model-name=$AZURE_MODEL_NAME_v2 azure-api-key=secretref:azure-api-key
 ```
 
 Now we will apply a label `staging` to the `v2` revision that we created:
@@ -148,13 +147,13 @@ The newly deployed revision can be tested by using the label-specific FQDN:
 export APP_DOMAIN=$(az containerapp env show -g $RG_NAME -n $ACA_ENV_NAME --query properties.defaultDomain -o tsv | tr -d '\r\n')
 
 #Test the production FQDN
-curl -X POST https://chatbackend.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
+curl -X POST https://chatbackendapp.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
 
 #Test the blue label FQDN
-curl -X POST https://chatbackend---v1.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
+curl -X POST https://chatbackendapp---blue.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
 
 #Test the green label FQDN
-curl -X POST https://chatbackend---v2.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
+curl -X POST https://chatbackendapp---green.$APP_DOMAIN/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
 ```
 
 >**Note**: A thing to notice here is that even though the `v2` revision is not receiving any production traffic, it is still accessible via its label-specific FQDN. This allows for testing and validation of the new revision before it is promoted to production. Fascinating, isn't it!
@@ -176,11 +175,11 @@ from collections import Counter
 import time
 
 # Replace with your actual external IP and port
-URL = "http://<YOUR_ACA_FQDN>/chat"
+URL = "https://<YOUR-ACA-FQDN>/chat"
 
 counts = Counter()
 
-for i in range(50):
+for i in range(10):
     try:
         resp = requests.post(URL, json={"message": "hi"}, timeout=10)
         data = resp.json()
