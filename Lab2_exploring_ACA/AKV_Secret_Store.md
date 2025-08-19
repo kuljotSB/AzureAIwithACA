@@ -132,8 +132,7 @@ az containerapp create \
 ```
 
 Run the following command to test your deployment:
-```bash
-curl -X POST <YOUR_CONTAINER_APP_FQDN>/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
+```bash\1`q1`curl -X POST <YOUR_CONTAINER_APP_FQDN>/chat -H "Content-Type: application/json" -d "{\"message\":\"hi\"}"
 ```
 
 ### Summary
