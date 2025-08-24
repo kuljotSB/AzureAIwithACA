@@ -109,6 +109,7 @@ az containerapp create \
   --image qdrant/qdrant:latest \
   --environment $ACA_ENV_NAME \
   --target-port 6333 \
+  --min-replicas 1 \
   --ingress external \
   --registry-server $ACR_NAME.azurecr.io \
   --registry-identity system \

@@ -1,17 +1,15 @@
-# Use the official Node.js image for building the app
-FROM node:18-alpine AS build
-
-# Set the working directory
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+
+COPY package*.json ./
 RUN npm ci
 
-# Copy the rest of the application files
 COPY . .
 
-# Build the application
+ARG VITE_BACKEND_URL
+ENV VITE_BACKEND_URL=${VITE_BACKEND_URL}
+
 RUN npm run build
 
 # Use the official Nginx image for serving the app
@@ -23,8 +21,5 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy the custom NGINX configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
-
-# Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
