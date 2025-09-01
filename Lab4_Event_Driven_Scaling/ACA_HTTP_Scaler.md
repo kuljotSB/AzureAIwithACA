@@ -24,13 +24,13 @@ For this lab we will be using the [ChatBackend](./ChatBackend/app.py) applicatio
 cd ChatBackend
 
 # Build the Docker image
-docker build -t $ACR_NAME.azurecr.io/chatbackend:latest .
+docker build -t $ACR_NAME.azurecr.io/chat-backend:latest .
 
 # Log in to ACR
 az acr login --name $ACR_NAME
 
 # Push the Docker image to ACR
-docker push $ACR_NAME.azurecr.io/chatbackend:latest
+docker push $ACR_NAME.azurecr.io/chat-backend:latest
 ```
 
 ### Deploy the Application to Azure Container Apps Environment
