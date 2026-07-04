@@ -51,11 +51,7 @@ def describe_image_with_aoai(image_url: str) -> str:
                 {"type": "image_url", "image_url": {"url": image_url}}
             ]},
         ],
-        max_tokens=8192,
         temperature=0.7,
-        top_p=0.95,
-        frequency_penalty=0.0,
-        presence_penalty=0.0,
         model=azure_openai_deployment,
     )
 
